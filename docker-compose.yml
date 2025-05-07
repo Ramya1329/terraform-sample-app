@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:5000
+
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    environment:
+      - ASPNETCORE_URLS=http://+:5000
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASS=password
+
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: sampledb
+    ports:
+      - "3306:3306"
+
